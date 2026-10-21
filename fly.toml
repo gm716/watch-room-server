@@ -1,53 +1,27 @@
-app = "watch-room-server"
-primary_region = "hkg"
+app = "watch-room-server-gm716" # ⚠️ 必须改成全球唯一的名称，比如加上你的名字缩写和数字
+primary_region = "hkg" # 香港节点，离国内近
 
 [build]
 
 [env]
   PORT = "3001"
   NODE_ENV = "production"
+  AUTH_KEY = "aB3x9K2mP8qR4tY6wE7vN1sD5fG0hJ2L" # ⚠️ 填入我之前给你生成的密钥
 
 [http_service]
   internal_port = 3001
   force_https = true
-  auto_stop_machines = false
+  auto_stop_machines = false # 观影室需要保持长连接，千万别让它休眠
   auto_start_machines = true
   min_machines_running = 1
   processes = ["app"]
 
-[[services]]
-  protocol = "tcp"
-  internal_port = 3001
-  processes = ["app"]
-
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-    force_https = true
-
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
-
-  [services.concurrency]
-    type = "connections"
-    hard_limit = 1000
-    soft_limit = 800
-
-  [[services.tcp_checks]]
-    interval = "15s"
-    timeout = "2s"
-    grace_period = "5s"
-    restart_limit = 0
-
-  [[services.http_checks]]
-    interval = "10s"
-    timeout = "2s"
-    grace_period = "5s"
-    method = "get"
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
     path = "/health"
-    protocol = "http"
-    restart_limit = 0
 
 [[vm]]
   cpu_kind = "shared"
