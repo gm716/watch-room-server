@@ -1,5 +1,5 @@
 app = "watch-room-server-gm716" # ⚠️ 必须改成全球唯一的名称，比如加上你的名字缩写和数字
-primary_region = "hkg" # 香港节点，离国内近
+primary_region = "sin" # 香港节点，离国内近
 
 [build]
 
